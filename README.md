@@ -8,8 +8,8 @@
 <!-- - [Contributing](../CONTRIBUTING.md) -->
 
 
- irm get.scoop.sh | iex -- Install scoop
- scoop install migrate  -- Install migrate
+ <!-- irm get.scoop.sh | iex -- Install scoop
+ scoop install migrate  -- Install migrate -->
 ## About <a name = "about"></a>
 
 
@@ -50,9 +50,15 @@ All the other commads regarding Docker is given into the make file.
 Istall scoop to dowmload the Make and Migrate
 
 ```
-scoop install migrate
+irm get.scoop.sh | iex
 
-scoop install make
+```
+
+Install Migrate & Make using scoop.
+```
+scoop install migrate       -- Install migrate
+
+scoop install make          -- Install make
 ```
 
 Rest are given in make file in project.
