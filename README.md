@@ -53,9 +53,7 @@ Istall scoop to dowmload the Make and Migrate
 
 ```
 irm get.scoop.sh | iex
-
 ```
-
 Install Migrate & Make using scoop.
 
 -- Install migrate

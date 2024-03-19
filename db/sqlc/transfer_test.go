@@ -10,8 +10,8 @@ import (
 
 func TestTransfer(t *testing.T) {
 	transferRandomAccount(t)
-	// getRandomTransfer(t)
-	// deleteRandomTransfer(t)
+	getRandomTransfer(t)
+	deleteRandomTransfer(t)
 }
 
 func transferRandomAccount(t *testing.T) Transfer {
