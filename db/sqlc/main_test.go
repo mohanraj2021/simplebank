@@ -16,17 +16,19 @@ const (
 
 var testQueries *Queries
 
-func TestMain(m *testing.M) {
+var testDb *sql.DB
 
-	conn, cerr := sql.Open(db, dbschema)
+func TestMain(m *testing.M) {
+	var cerr error
+	testDb, cerr = sql.Open(db, dbschema)
 
 	if cerr != nil {
 		log.Fatalf("Unable make connection to the DB beacaus %s", cerr.Error())
 	}
 
-	defer conn.Close()
+	// defer conn.Close()
 
-	testQueries = New(conn)
+	testQueries = New(testDb)
 
 	os.Exit(m.Run())
 
