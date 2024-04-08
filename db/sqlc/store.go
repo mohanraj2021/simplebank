@@ -11,6 +11,13 @@ type Store struct {
 	db *sql.DB
 }
 
+func NewStore(db *sql.DB) *Store {
+	return &Store{
+		db:      db,
+		Queries: New(db),
+	}
+}
+
 func (store *Store) exeTrx(ctx context.Context, fn func(q *Queries) error) error {
 
 	tx, terr := store.db.BeginTx(ctx, nil)
