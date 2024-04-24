@@ -52,9 +52,9 @@ type TransferTxResult struct {
 
 // var txKey = struct{}{}
 
-func (store *Store) TransferTx(ctx context.Context, args TransferTxParams) (TransferTxResult, error) {
+func (store *Store) TransferTx(ctx context.Context, args TransferTxParams) (txResult TransferTxResult, err error) {
 	var result TransferTxResult
-	var err error
+	// var err error
 	// var txName = ctx.Value(txKey)
 	store.exeTrx(ctx, func(q *Queries) error {
 		var terr error
@@ -78,25 +78,36 @@ func (store *Store) TransferTx(ctx context.Context, args TransferTxParams) (Tran
 		}
 
 		// fmt.Println(txName, "to getaccount for update")
-		result.FromAccount, err = q.AddAccountBalance(context.Background(), AddAccountBalanceParams{
-			ID:     args.FromAccountID,
-			Amount: -args.Amount,
-		})
-		if err != nil {
-			return err
-		}
 
-		// fmt.Println(txName, "to account update")
-		result.ToAccount, err = q.AddAccountBalance(context.Background(), AddAccountBalanceParams{
-			ID:     args.ToAccountID,
-			Amount: args.Amount,
-		})
-		if err != nil {
-			return err
+		if args.FromAccountID > args.ToAccountID {
+			result.FromAccount, result.ToAccount, err = addMoney(ctx, q, args.FromAccountID, -args.Amount, args.ToAccountID, args.Amount)
+		} else {
+			result.ToAccount, result.FromAccount, err = addMoney(ctx, q, args.ToAccountID, args.Amount, args.FromAccountID, -args.Amount)
+
 		}
 
 		return nil
 	})
 
 	return result, nil
+}
+
+func addMoney(ctx context.Context, q *Queries,
+	fromAccountId int64,
+	fromAmount int64,
+	toAccountId int64,
+	toAmount int64) (fromAcc Account, toAcc Account, err error) {
+
+	fromAcc, err = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+		ID:     fromAccountId,
+		Amount: fromAmount,
+	})
+	if err != nil {
+		return
+	}
+	toAcc, err = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+		ID:     toAccountId,
+		Amount: toAmount,
+	})
+	return
 }

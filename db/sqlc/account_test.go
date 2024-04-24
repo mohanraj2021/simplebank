@@ -12,7 +12,7 @@ func createRandomAccount(t *testing.T) Account {
 
 	arg := CreateAccountParams{
 		Owner:   utils.RandomAccountName(6),
-		Balance: utils.RandomINT(2, 6),
+		Balance: utils.RandomINT(3, 6),
 		Curreny: utils.RandomCurrency(),
 	}
 

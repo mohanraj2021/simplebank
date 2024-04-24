@@ -106,7 +106,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
 
-	n := 10
+	n := 50
 	amount := int64(10)
 
 	errs := make(chan error)

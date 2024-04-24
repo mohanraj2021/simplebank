@@ -1,17 +1,17 @@
 postgres:
-	docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=admin -d postgres:12-alpine
+	sudo docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=admin -d postgres:12-alpine
 
 postgresstart:
-	docker start postgres12
+	sudo docker start postgres12
 
 postgresstop:
-	docker stop postgres12
+	sudo docker stop postgres12
 
 createdb:
-	docker exec -it postgres12 createdb --username=root --owner=root simplebank
+	sudo docker exec -it postgres12 createdb --username=root --owner=root simplebank
 
 dropdb:
-	docker exec -it postgres12 dropdb simplebank
+	sudo docker exec -it postgres12 dropdb simplebank
 
 migrateup:
 	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simplebank?sslmode=disable" -verbose up
