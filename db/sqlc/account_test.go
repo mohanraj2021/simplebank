@@ -37,6 +37,8 @@ func TestAccount(t *testing.T) {
 	upDateAccount(t)
 	getRandomAccount(t)
 	deleteRandomAccount(t)
+	getRandAccountForUpdate(t)
+	getListAccount(t)
 }
 
 func upDateAccount(t *testing.T) Account {
@@ -81,4 +83,24 @@ func deleteRandomAccount(t *testing.T) {
 	// require.NotZero(t, acc)
 
 	require.NotEmpty(t, acc)
+}
+
+func getRandAccountForUpdate(t *testing.T) {
+	accountId := utils.RandomINT(1, 4)
+	acc, aerr := testQueries.GetAccountForUpdate(context.Background(), accountId)
+	require.NoError(t, aerr)
+
+	require.NotEmpty(t, acc)
+}
+
+func getListAccount(t *testing.T) {
+	args := ListAccountsParams{
+		Limit:  3,
+		Offset: 0,
+	}
+	acc, aerr := testQueries.ListAccounts(context.Background(), args)
+	require.NoError(t, aerr)
+
+	require.NotEmpty(t, acc)
+	require.NotEqual(t, 0, len(acc))
 }

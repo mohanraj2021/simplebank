@@ -9,6 +9,32 @@ import (
 	"context"
 )
 
+const addAccountBalance = `-- name: AddAccountBalance :one
+UPDATE account SET 
+balance = balance + $1
+WHERE id = $2
+RETURNING id, owner, balance, curreny, create_at
+`
+
+type AddAccountBalanceParams struct {
+	Amount int64 `json:"amount"`
+	ID     int64 `json:"id"`
+}
+
+// @cache-ttl 30
+func (q *Queries) AddAccountBalance(ctx context.Context, arg AddAccountBalanceParams) (Account, error) {
+	row := q.db.QueryRowContext(ctx, addAccountBalance, arg.Amount, arg.ID)
+	var i Account
+	err := row.Scan(
+		&i.ID,
+		&i.Owner,
+		&i.Balance,
+		&i.Curreny,
+		&i.CreateAt,
+	)
+	return i, err
+}
+
 const createAccount = `-- name: CreateAccount :one
 INSERT INTO account (
   owner,balance,curreny
@@ -73,7 +99,7 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 const getAccountForUpdate = `-- name: GetAccountForUpdate :one
 SELECT id, owner, balance, curreny, create_at FROM account
 WHERE id = $1 LIMIT 1
-FOR UPDATE
+FOR NO KEY UPDATE
 `
 
 // @cache-ttl 30
