@@ -78,3 +78,5 @@ Check with make file in project for further update commands.
 ## Usage <a name = "usage"></a>
 
 Start the docker engine and run the postgres image. Then start the banking operations with code. 
+
+If you are using the Linux machine just rename the make file "makefile linux" to makefile 
