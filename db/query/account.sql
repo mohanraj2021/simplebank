@@ -12,6 +12,12 @@ RETURNING *;
 SELECT * FROM account
 WHERE id = $1 LIMIT 1;
 
+-- name: GetAccountForUpdate :one
+-- @cache-ttl 30
+SELECT * FROM account
+WHERE id = $1 LIMIT 1
+FOR UPDATE;
+
 -- name: ListAccounts :many
 -- @cache-ttl 30
 SELECT * FROM account

@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"errors"
 )
 
 const createTransfers = `-- name: CreateTransfers :one
@@ -27,11 +26,8 @@ type CreateTransfersParams struct {
 
 // @cache-ttl 30
 func (q *Queries) CreateTransfers(ctx context.Context, arg CreateTransfersParams) (Transfer, error) {
-	var i Transfer
-	if arg.FromAccountID == arg.ToAccountID{
-		return i, errors.New("transferring acount cannot be same")
-	}
 	row := q.db.QueryRowContext(ctx, createTransfers, arg.FromAccountID, arg.ToAccountID, arg.Amount)
+	var i Transfer
 	err := row.Scan(
 		&i.ID,
 		&i.FromAccountID,
