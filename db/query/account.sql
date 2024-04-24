@@ -16,7 +16,7 @@ WHERE id = $1 LIMIT 1;
 -- @cache-ttl 30
 SELECT * FROM account
 WHERE id = $1 LIMIT 1
-FOR UPDATE;
+FOR NO KEY UPDATE;
 
 -- name: ListAccounts :many
 -- @cache-ttl 30
@@ -30,6 +30,13 @@ OFFSET $2;
 UPDATE account SET 
 balance = $2
 WHERE id = $1
+RETURNING *;
+
+-- name: AddAccountBalance :one
+-- @cache-ttl 30
+UPDATE account SET 
+balance = balance + sqlc.arg(amount)
+WHERE id = sqlc.arg(id)
 RETURNING *;
 
 -- name: DeleteAccount :one

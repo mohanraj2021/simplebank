@@ -9,6 +9,7 @@ import (
 )
 
 func TestEntries(t *testing.T) {
+	t.Parallel()
 	testCreateEntry(t)
 	testGetEntry(t)
 	testListEntries(t)

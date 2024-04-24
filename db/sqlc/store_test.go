@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -21,10 +20,10 @@ func TestTransferTx(t *testing.T) {
 	result := make(chan TransferTxResult)
 	existed := make(map[int]bool)
 	for i := 0; i < n; i++ {
-		txValue := fmt.Sprintf("tx %d", i+1)
-		ctx := context.WithValue(context.Background(), txKey, txValue)
+		// txValue := fmt.Sprintf("tx %d", i+1)
+		// ctx := context.WithValue(context.Background(), txKey, txValue)
 		go func() {
-			transferTxResult, err := store.TransferTx(ctx, TransferTxParams{
+			transferTxResult, err := store.TransferTx(context.Background(), TransferTxParams{
 				FromAccountID: account1.ID,
 				ToAccountID:   account2.ID,
 				Amount:        amount,
@@ -99,4 +98,50 @@ func TestTransferTx(t *testing.T) {
 
 	require.Equal(t, account1.Balance-int64(n)*amount, updatedAccount1.Balance)
 	require.Equal(t, account2.Balance+int64(n)*amount, updatedAccount2.Balance)
+}
+
+func TestTransferTxDeadlock(t *testing.T) {
+	store := NewStore(testDb)
+
+	account1 := createRandomAccount(t)
+	account2 := createRandomAccount(t)
+
+	n := 10
+	amount := int64(10)
+
+	errs := make(chan error)
+	for i := 0; i < n; i++ {
+		// txValue := fmt.Sprintf("tx %d", i+1)
+		// ctx := context.WithValue(context.Background(), txKey, txValue)
+		fromAccountId := account1.ID
+		toAccountId := account2.ID
+
+		if i%2 == 1 {
+			fromAccountId = account2.ID
+			toAccountId = account1.ID
+		}
+		go func() {
+			_, err := store.TransferTx(context.Background(), TransferTxParams{
+				FromAccountID: fromAccountId,
+				ToAccountID:   toAccountId,
+				Amount:        amount,
+			})
+
+			errs <- err
+		}()
+	}
+
+	for i := 0; i < n; i++ {
+		err := <-errs
+		require.NoError(t, err)
+	}
+
+	updatedAccount1, err1 := testQueries.GetAccount(context.Background(), account1.ID)
+	require.NoError(t, err1)
+
+	updatedAccount2, err2 := testQueries.GetAccount(context.Background(), account2.ID)
+	require.NoError(t, err2)
+
+	require.Equal(t, account1.Balance, updatedAccount1.Balance)
+	require.Equal(t, account2.Balance, updatedAccount2.Balance)
 }
