@@ -6,19 +6,23 @@ import (
 	"fmt"
 )
 
-type Store struct {
+type Store interface {
+	Querier
+	TransferTx(ctx context.Context, args TransferTxParams) (txResult TransferTxResult, err error)
+}
+type SQLStore struct {
 	*Queries
 	db *sql.DB
 }
 
-func NewStore(db *sql.DB) *Store {
-	return &Store{
+func NewStore(db *sql.DB) Store {
+	return &SQLStore{
 		db:      db,
 		Queries: New(db),
 	}
 }
 
-func (store *Store) exeTrx(ctx context.Context, fn func(q *Queries) error) error {
+func (store *SQLStore) exeTrx(ctx context.Context, fn func(q *Queries) error) error {
 
 	tx, terr := store.db.BeginTx(ctx, nil)
 
@@ -37,9 +41,9 @@ func (store *Store) exeTrx(ctx context.Context, fn func(q *Queries) error) error
 }
 
 type TransferTxParams struct {
-	FromAccountID int64 `json:"from_account_id"`
-	ToAccountID   int64 `json:"to_account_id"`
-	Amount        int64 `json:"amount"`
+	FromAccountID int64 `json:"from_account_id" binding:"required,gt=0"`
+	ToAccountID   int64 `json:"to_account_id" binding:"required,gt=0"`
+	Amount        int64 `json:"amount" binding:"required,gt=0"`
 }
 
 type TransferTxResult struct {
@@ -52,7 +56,7 @@ type TransferTxResult struct {
 
 // var txKey = struct{}{}
 
-func (store *Store) TransferTx(ctx context.Context, args TransferTxParams) (txResult TransferTxResult, err error) {
+func (store *SQLStore) TransferTx(ctx context.Context, args TransferTxParams) (txResult TransferTxResult, err error) {
 	var result TransferTxResult
 	// var err error
 	// var txName = ctx.Value(txKey)

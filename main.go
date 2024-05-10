@@ -3,20 +3,26 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/simplebank/api"
 	db "github.com/simplebank/db/sqlc"
-)
-
-const (
-	dbDrive  = "postgres"
-	dbschema = "postgresql://root:admin@localhost:5432/simplebank?sslmode=disable"
-	addr     = "0.0.0.0:2207"
+	"github.com/simplebank/types"
 )
 
 func main() {
-	conn, cerr := sql.Open(dbDrive, dbschema)
+	if lerr := godotenv.Load(".env"); lerr != nil {
+		log.Fatalf("Unable make connection to the DB beacaus %s", lerr.Error())
+		os.Exit(1)
+	}
+
+	types.DbDrive = os.Getenv("DB_DRIVE")
+	types.DbSchema = os.Getenv("DB_SCHEMA")
+	types.Addr = os.Getenv("ADDR")
+
+	conn, cerr := sql.Open(types.DbDrive, types.DbSchema)
 
 	if cerr != nil {
 		log.Fatalf("Unable make connection to the DB beacaus %s", cerr.Error())
@@ -24,5 +30,5 @@ func main() {
 
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
-	server.Start(addr)
+	server.Start(types.Addr)
 }
