@@ -35,7 +35,7 @@ func (server *Server) addaccount(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Account created successfully", "account": acc})
+	c.JSON(http.StatusOK, gin.H{"account": acc})
 }
 
 func (server *Server) getAccount(c *gin.Context) {
@@ -60,7 +60,7 @@ func (server *Server) getAccount(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Account retrieved successfully", "account": acc})
+	c.JSON(http.StatusOK, gin.H{"account": acc})
 
 }
 
@@ -92,7 +92,7 @@ func (server *Server) getAccountList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "success", "accounts": accList})
+	c.JSON(http.StatusOK, gin.H{"accounts": accList})
 }
 
 func (server *Server) updateAccountBalance(c *gin.Context) {
@@ -118,7 +118,7 @@ func (server *Server) updateAccountBalance(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, errorResponse(upaccerr))
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "success", "accounts": acc})
+	c.JSON(http.StatusOK, gin.H{"account": acc})
 
 }
 
