@@ -14,7 +14,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14-alpine
+        image: postgres:12
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: admin
@@ -44,8 +44,6 @@ jobs:
         sudo mv migrate.linux-amd64 /usr/bin/migrate
         which migrate
 
-    - name: create DB
-      run: make createdb
 
     - name: Run migrations
       run: make migrateup
