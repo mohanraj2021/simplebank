@@ -8,22 +8,22 @@ postgresstop:
 	sudo docker stop postgres12
 
 createdb:
-	sudo docker exec -it postgres12 createdb --username=root --owner=root simplebank
+	sudo docker exec -it postgres12 createdb --username=root --owner=root simple_bank
 
 dropdb:
-	sudo docker exec -it postgres12 dropdb simplebank
+	sudo docker exec -it postgres12 dropdb simple_bank
 
 migrateup:
-	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simplebank?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simple_bank?sslmode=disable" -verbose up
 
 migrateup1:
-	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simplebank?sslmode=disable" -verbose up 1
+	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simple_bank?sslmode=disable" -verbose up 1
 
 migratedown:
-	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simplebank?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simple_bank?sslmode=disable" -verbose down
 
 migratedown1:
-	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simplebank?sslmode=disable" -verbose down 1
+	migrate -path db/migration -database "postgres://root:admin@localhost:5432/simple_bank?sslmode=disable" -verbose down 1
 
 sqlc:
 	sqlc generate
@@ -35,6 +35,6 @@ main:
 	go run main.go
 
 mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/simplebank/db/sqlc Store
+	mockgen -package mockdb -destination db/mock/store.go github.com/simple_bank/db/sqlc Store
 
 .PHONY: postgres postgresstart postgresstop createdb dropdb migrateup migratedown sqlc test mock
