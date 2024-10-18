@@ -1,3 +1,3 @@
-DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS transfers;
-DROP TABLE IF EXISTS entries;
+DROP TABLE IF EXISTS account cascade;
+DROP TABLE IF EXISTS transfers cascade;
+DROP TABLE IF EXISTS entries cascade;

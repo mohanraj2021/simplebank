@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -21,6 +22,15 @@ func main() {
 	types.DbDrive = os.Getenv("DB_DRIVE")
 	types.DbSchema = os.Getenv("DB_SCHEMA")
 	types.Addr = os.Getenv("ADDR")
+	types.SecreteKey = os.Getenv("SECRETKEY")
+
+	key, ok := os.LookupEnv("TOKEN_DURATION")
+	if !ok {
+		log.Fatal("Unable to get env variable ")
+		os.Exit(1)
+	}
+
+	types.Token_Duration, _ = strconv.Atoi(key)
 
 	conn, cerr := sql.Open(types.DbDrive, types.DbSchema)
 

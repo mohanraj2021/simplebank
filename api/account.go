@@ -3,17 +3,19 @@ package api
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	db "github.com/simplebank/db/sqlc"
+	"github.com/simplebank/token"
 )
 
 func (server *Server) addaccount(c *gin.Context) {
 
 	type createAccountRequest struct {
-		Owner   string `json:"name" binding:"required"`
-		Curreny string `json:"currency" binding:"required,oneof=INR USD"`
+		Owner    string `json:"name" binding:"required"`
+		Currency string `json:"currency" binding:"required,oneof=INR USD"`
 	}
 	var crAcc createAccountRequest
 
@@ -23,9 +25,9 @@ func (server *Server) addaccount(c *gin.Context) {
 	}
 
 	createAccountParam := db.CreateAccountParams{
-		Owner:   crAcc.Owner,
-		Curreny: crAcc.Curreny,
-		Balance: 0,
+		Owner:    crAcc.Owner,
+		Currency: crAcc.Currency,
+		Balance:  0,
 	}
 
 	acc, caerr := server.store.CreateAccount(context.Background(), createAccountParam)
@@ -39,6 +41,7 @@ func (server *Server) addaccount(c *gin.Context) {
 }
 
 func (server *Server) getAccount(c *gin.Context) {
+	payload := c.MustGet("authpayload").(*token.Payload)
 	type getAccounrById struct {
 		Id int64 `uri:"id" binding:"required,min=1"`
 	}
@@ -57,6 +60,12 @@ func (server *Server) getAccount(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusInternalServerError, errorResponse(aerr))
+		return
+	}
+
+	if acc.Owner != payload.Username {
+		err := errors.New("user is not authorized to perform this action")
+		c.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 

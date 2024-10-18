@@ -29,3 +29,12 @@ func RandomCurrency() string {
 	lc := len(cur)
 	return cur[rand.Intn(lc)]
 }
+
+func RandomString(n int) string {
+	var sb strings.Builder
+	k := len(str)
+	for i := 0; i <= n; i++ {
+		sb.WriteByte(str[rand.Intn(k)])
+	}
+	return sb.String()
+}

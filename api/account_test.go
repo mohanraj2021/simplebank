@@ -97,8 +97,8 @@ func TestAddAccount(t *testing.T) {
 
 	account := randomAccount()
 	createAccParams := db.CreateAccountParams{
-		Owner:   account.Owner,
-		Curreny: account.Curreny,
+		Owner:    account.Owner,
+		Currency: account.Currency,
 	}
 
 	controller := gomock.NewController(t)
@@ -109,7 +109,7 @@ func TestAddAccount(t *testing.T) {
 	server := NewServer(store)
 	recorder := httptest.NewRecorder()
 
-	data := fmt.Sprintf(`{"name":"%s","currency":"%s"}`, account.Owner, account.Curreny)
+	data := fmt.Sprintf(`{"name":"%s","currency":"%s"}`, account.Owner, account.Currency)
 
 	req, err := http.NewRequest(http.MethodPost, "/addaccount", bytes.NewBuffer([]byte(data)))
 
@@ -191,9 +191,9 @@ func TestDeleteAcount(t *testing.T) {
 func randomAccount() db.Account {
 
 	return db.Account{
-		ID:      utils.RandomINT(1, 1000),
-		Owner:   utils.RandomAccountName(10),
-		Balance: utils.RandomINT(100, 1000),
-		Curreny: utils.RandomCurrency(),
+		ID:       utils.RandomINT(1, 1000),
+		Owner:    utils.RandomAccountName(10),
+		Balance:  utils.RandomINT(100, 1000),
+		Currency: utils.RandomCurrency(),
 	}
 }
