@@ -1,7 +1,7 @@
 -- name: CreateAccount :one
 -- @cache-ttl 30
 INSERT INTO account (
-  owner,balance,curreny
+  owner,balance,currency
 ) VALUES (
   $1, $2,$3
 )

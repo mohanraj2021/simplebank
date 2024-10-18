@@ -58,7 +58,7 @@ func (server *Server) checkAccCurrency(fromId, toId int64, c *gin.Context) bool 
 		return false
 	}
 
-	if acc1.Curreny != acc2.Curreny {
+	if acc1.Currency != acc2.Currency {
 		err := fmt.Errorf("the currency of acc id %d and  acc id %d is doesn't match", fromId, toId)
 		c.JSON(http.StatusBadRequest, errorResponse(err))
 		return false

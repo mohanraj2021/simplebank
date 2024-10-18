@@ -11,9 +11,9 @@ import (
 func createRandomAccount(t *testing.T) Account {
 
 	arg := CreateAccountParams{
-		Owner:   utils.RandomAccountName(6),
-		Balance: utils.RandomINT(3, 6),
-		Curreny: utils.RandomCurrency(),
+		Owner:    utils.RandomAccountName(6),
+		Balance:  utils.RandomINT(3, 6),
+		Currency: utils.RandomCurrency(),
 	}
 
 	acc, aerr := testQueries.CreateAccount(context.Background(), arg)
@@ -23,7 +23,7 @@ func createRandomAccount(t *testing.T) Account {
 
 	require.Equal(t, arg.Owner, acc.Owner)
 	require.Equal(t, arg.Balance, acc.Balance)
-	require.Equal(t, arg.Curreny, acc.Curreny)
+	require.Equal(t, arg.Currency, acc.Currency)
 
 	require.NotZero(t, acc.ID)
 	require.NotZero(t, acc.CreateAt)
@@ -70,7 +70,7 @@ func getRandomAccount(t *testing.T) Account {
 
 	require.NotZero(t, accountId, acc.ID)
 	require.NotEmpty(t, acc.Owner)
-	require.NotEmpty(t, acc.Curreny)
+	require.NotEmpty(t, acc.Currency)
 
 	return acc
 }

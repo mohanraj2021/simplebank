@@ -2,7 +2,7 @@ CREATE TABLE "account" (
   "id" bigserial PRIMARY KEY,
   "owner" varchar NOT NULL,
   "balance" bigint NOT NULL,
-  "curreny" varchar NOT NULL,
+  "currency" varchar NOT NULL,
   "create_at" timestamp NOT NULL DEFAULT (now())
 );
 
