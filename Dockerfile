@@ -1,11 +1,11 @@
-FROM golang:1.18-alpine3.13 as builder
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 COPY . .
 RUN go build -o simplebank main.go
 
-FROM alpine:3.13
-COPY .env /app/.env
+FROM alpine
+COPY .env .env
 COPY --from=builder /app/simplebank .
 EXPOSE 2207
 CMD ["./simplebank"]    
