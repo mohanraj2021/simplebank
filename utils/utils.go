@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -37,4 +38,13 @@ func RandomString(n int) string {
 		sb.WriteByte(str[rand.Intn(k)])
 	}
 	return sb.String()
+}
+
+func RandomAccountEmail(n int) string {
+	var sb strings.Builder
+	k := len(str)
+	for i := 0; i <= n; i++ {
+		sb.WriteByte(str[rand.Intn(k)])
+	}
+	return fmt.Sprintf("%s@mail.com", sb.String())
 }
