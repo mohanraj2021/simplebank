@@ -10,8 +10,9 @@ import (
 
 func createRandomAccount(t *testing.T) Account {
 
+	user := createRandomUser(t)
 	arg := CreateAccountParams{
-		Owner:    utils.RandomAccountName(6),
+		Owner:    user.Username,
 		Balance:  utils.RandomINT(3, 6),
 		Currency: utils.RandomCurrency(),
 	}
@@ -46,9 +47,7 @@ func upDateAccount(t *testing.T) Account {
 		ID:      1,
 		Balance: 125,
 	}
-
 	acc, aerr := testQueries.UpdateAccount(context.Background(), args)
-
 	require.NoError(t, aerr)
 	require.NotEmpty(t, acc)
 

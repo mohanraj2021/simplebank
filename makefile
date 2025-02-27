@@ -34,6 +34,18 @@ test:
 main:
 	go run main.go
 
+buildbank:
+	 sudo docker buildx build -t simplebank:latest .
+
+runbank:
+	sudo docker run --name simplebank -p 2207:2207 -d simplebank
+
+startbank:
+	sudo docker start simplebank
+
+stopbank:
+	sudo docker stop simplebank
+
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/simple_bank/db/sqlc Store
 

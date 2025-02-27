@@ -11,7 +11,7 @@ import (
 
 const (
 	db       = "postgres"
-	dbschema = "postgresql://root:admin@localhost:5432/simplebank?sslmode=disable"
+	dbschema = "postgresql://root:admin@localhost:5432/simple_bank?sslmode=disable"
 )
 
 var testQueries *Queries
