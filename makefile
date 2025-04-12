@@ -1,5 +1,5 @@
 postgres:
-	sudo docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=admin -d postgres:12-alpine
+	sudo docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root --net banknetwork -e POSTGRES_PASSWORD=admin -d postgres:12-alpine 
 
 postgresstart:
 	sudo docker start postgres12
@@ -38,7 +38,7 @@ buildbank:
 	 sudo docker buildx build -t simplebank:latest .
 
 runbank:
-	sudo docker run --name simplebank -p 2207:2207 -d simplebank
+	sudo docker run --name simplebank -p 2207:2207 --net banknetwork -d simplebank 
 
 startbank:
 	sudo docker start simplebank

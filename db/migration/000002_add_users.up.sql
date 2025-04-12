@@ -9,6 +9,6 @@ CREATE TABLE "users" (
 
 -- CREATE INDEX ON "users" ("username");
 
-ALTER TABLE "account" ADD FOREIGN KEY ("owner") REFERENCES "users" ("username");
+ALTER TABLE "account" ADD FOREIGN KEY ("account_owner_fkey") REFERENCES "users" ("username");
 
 ALTER TABLE "account" ADD CONSTRAINT "owner_currency_key" UNIQUE ("owner","currency");
