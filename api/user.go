@@ -37,6 +37,11 @@ func (server *Server) addUser(c *gin.Context) {
 		return
 	}
 
+	if t := server.Allow(createUser.Username); !t {
+		c.JSON(http.StatusTooManyRequests, gin.H{"Message": "Too many request"})
+		return
+	}
+
 	hashPwd, herr := utils.HashPassword(createUser.Password)
 
 	if herr != nil {
