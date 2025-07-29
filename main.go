@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -41,4 +42,6 @@ func main() {
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 	server.Start(types.Addr)
+
+	server.StartCleanup(5 * time.Minute)
 }
