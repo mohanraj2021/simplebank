@@ -33,3 +33,19 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 
 }
+
+func TestMain1(m *testing.M) {
+	var cerr error
+	testDb, cerr = sql.Open(db, dbschema)
+
+	if cerr != nil {
+		log.Fatalf("Unable make connection to the DB beacaus %s", cerr.Error())
+	}
+
+	// defer conn.Close()
+
+	testQueries = New(testDb)
+
+	os.Exit(m.Run())
+
+}
